@@ -1,0 +1,19 @@
+{
+  "name": "f1_race_car_explorer",
+  "version": "1.0.0",
+  "description": "Welcome to F1 Race Car Explorer, a web application that allows you to explore and discover information about Formula 1 race cars and drivers from various teams and seasons.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kalviumcommunity/S61_F1_Race_Car_Explorer.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kalviumcommunity/S61_F1_Race_Car_Explorer/issues"
+  },
+  "homepage": "https://github.com/kalviumcommunity/S61_F1_Race_Car_Explorer#readme"
+}
