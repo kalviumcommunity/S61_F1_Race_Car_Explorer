@@ -41,3 +41,6 @@ Additionally, here are some areas for future development:
 3. Enhance user interface for better usability.
 
 Deployed render link -- https://s61-f1-race-car-explorer.onrender.com/
+
+
+Front-end deployment -- https://6630e597dee014041b056859--bejewelled-crumble-7e8cb3.netlify.app/
