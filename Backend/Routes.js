@@ -15,7 +15,6 @@ raceRouter.post('/racecars', async (req, res) => {
 
 // Route for getting all race cars
 raceRouter.get('/racecars', async (req, res) => {
-  // res.json({msg: "GET request successful"}) 
   try {
     const raceCars = await TeamModal.find();
     res.status(200).send({ msg: "Race cars received", raceCars });
@@ -40,28 +39,16 @@ raceRouter.get('/racecars/:id', async (req, res) => {
   }
 });
 
-// Route for updating a race car by ID
-raceRouter.put('/racecars/:id', async (req, res) => {
-  try {
-    const  { id }  = req.params;
-    const updatedRaceCar = await TeamModal.findByIdAndUpdate(id, req.body);
+// Route for updating or patching a race car by ID
+raceRouter.put('/racecars/:id', updateRaceCar);
+raceRouter.patch('/racecars/:id', updateRaceCar);
 
-    if (!updatedRaceCar) {
-      return res.status(404).json({ message: "Race car not found" });
-    }
-
-    res.status(200).json({ message: "Race car updated successfully", raceCar: updatedRaceCar });
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-});
-
-// Route for updating a race car by ID
-raceRouter.patch('/racecars/:id', async (req, res) => {
+async function updateRaceCar(req, res) {
   try {
     const { id } = req.params;
-    const updatedRaceCar = await TeamModal.findByIdAndUpdate(id, req.body, { new: true });
-
+    const options = req.method === 'PUT' ? {} : { new: true }; // Set options based on request method
+    const updatedRaceCar = await TeamModal.findByIdAndUpdate(id, req.body, options);
+ 
     if (!updatedRaceCar) {
       return res.status(404).json({ message: "Race car not found" });
     }
@@ -70,8 +57,7 @@ raceRouter.patch('/racecars/:id', async (req, res) => {
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
-});
-
+}
 
 // Route for deleting a race car by ID
 raceRouter.delete('/racecars/:id', async (req, res) => {
@@ -89,5 +75,4 @@ raceRouter.delete('/racecars/:id', async (req, res) => {
   }
 });
 
-
-module.exports = {raceRouter};
+module.exports = { raceRouter };
