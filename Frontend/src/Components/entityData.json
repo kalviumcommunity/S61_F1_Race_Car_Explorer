@@ -1,0 +1,38 @@
+[
+    {
+        "id": 1,
+        "name": "Lewis Hamilton",
+        "team": "Mercedes-AMG Petronas Formula One Team",
+        "carModel": "Mercedes-AMG F1 W13 E Performance",
+        "engine": "Mercedes-AMG F1 M13 E Performance",
+        "winsIn2023Season": 8,
+        "polePositionsIn2023Season": 10
+    },
+    {
+        "id": 2,
+        "name": "Max Verstappen",
+        "team": "Red Bull Racing Honda",
+        "carModel": "Red Bull Racing RBPT 01",
+        "engine": "Honda RA622H",
+        "winsIn2023Season": 6,
+        "polePositionsIn2023Season": 5
+    },
+    {
+        "id": 3,
+        "name": "Oscar Piastri",
+        "team": "McLaren Formula 1 Team",
+        "carModel": "McLaren MCL37",
+        "engine": "Mercedes-AMG F1 M13 E Performance",
+        "winsIn2023Season": 2,
+        "polePositionsIn2023Season": 1
+    },
+    {
+        "id": 4,
+        "name": "Charles Leclerc",
+        "team": "Scuderia Ferrari Mission Winnow",
+        "carModel": "Ferrari SF-23H",
+        "engine": "Ferrari 067/7",
+        "winsIn2023Season": 3,
+        "polePositionsIn2023Season": 3
+    }
+]
