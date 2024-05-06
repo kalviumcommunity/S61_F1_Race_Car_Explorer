@@ -10,6 +10,7 @@ const AddDataForm = forwardRef((props, ref) => {
     winsIn2023Season: "",
     polePositionsIn2023Season: ""
   });
+  const [errors, setErrors] = useState({});
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -21,15 +22,46 @@ const AddDataForm = forwardRef((props, ref) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    try {
-      // Send POST request to backend API to save new entity
-      const response = await axios.post("http://localhost:3000/api/racecars", formData);
-      console.log(response.data); // Log the response from the server
-      // Reset the form after successful submission
-      resetForm();
-    } catch (error) {
-      console.error('Error adding new entity:', error);
+    if (validateForm()) {
+      try {
+        // Send POST request to backend API to save new entity
+        const response = await axios.post("http://localhost:3000/api/racecars", formData);
+        console.log(response.data); // Log the response from the server
+        // Reset the form after successful submission
+        resetForm();
+      } catch (error) {
+        console.error('Error adding new entity:', error);
+      }
     }
+  };
+
+  const validateForm = () => {
+    let valid = true;
+    const newErrors = {};
+
+    // Validate name field
+    if (!formData.name.trim()) {
+      newErrors.name = "Name is required";
+      valid = false;
+    } else if (!/^[a-zA-Z\s]+$/.test(formData.name)) {
+      newErrors.name = "Name must contain only letters";
+      valid = false;
+    }
+
+
+    // Validate numeric fields
+    if (!/^\d+$/.test(formData.winsIn2023Season)) {
+      newErrors.winsIn2023Season = "Wins must be a number";
+      valid = false;
+    }
+
+    if (!/^\d+$/.test(formData.polePositionsIn2023Season)) {
+      newErrors.polePositionsIn2023Season = "Pole positions must be a number";
+      valid = false;
+    }
+
+    setErrors(newErrors);
+    return valid;
   };
 
   // Function to reset the form
@@ -42,6 +74,7 @@ const AddDataForm = forwardRef((props, ref) => {
       winsIn2023Season: "",
       polePositionsIn2023Season: ""
     });
+    setErrors({});
   };
 
   // Expose a function to reset the form using ref
@@ -63,6 +96,7 @@ const AddDataForm = forwardRef((props, ref) => {
             onChange={handleChange}
             required
           />
+          {errors.name && <div className="text-danger">{errors.name}</div>}
         </div>
         <div className="mb-3">
           <label className="form-label">Team:</label>
@@ -107,6 +141,7 @@ const AddDataForm = forwardRef((props, ref) => {
             onChange={handleChange}
             required
           />
+          {errors.winsIn2023Season && <div className="text-danger">{errors.winsIn2023Season}</div>}
         </div>
         <div className="mb-3">
           <label className="form-label">Pole Positions in 2023 Season:</label>
@@ -118,6 +153,7 @@ const AddDataForm = forwardRef((props, ref) => {
             onChange={handleChange}
             required
           />
+          {errors.polePositionsIn2023Season && <div className="text-danger">{errors.polePositionsIn2023Season}</div>}
         </div>
         <button type="submit" className="btn btn-secondary">
           Submit
