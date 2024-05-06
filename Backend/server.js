@@ -7,10 +7,8 @@ const cors = require('cors');
 const App = express();
 
 App.use(cors());
+
 App.use(express.json());
-
-
-
 
 // Ping route
 App.get("/ping", (req, res) => {
