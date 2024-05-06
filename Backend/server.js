@@ -6,9 +6,11 @@ require("dotenv").config();
 const cors = require('cors');
 const App = express();
 
+App.use(cors());
 App.use(express.json());
 
-App.use(cors());
+
+
 
 // Ping route
 App.get("/ping", (req, res) => {
