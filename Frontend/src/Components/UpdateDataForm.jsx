@@ -15,7 +15,7 @@ function UpdateDataForm() {
             .catch(error => {
                 console.log('Error fetching race cars:', error);
             });
-    }, []);
+    }, [updatedRaceCarData]);
 
     const handleEdit = (id) => {
         setSelectedRaceCarId(id);
@@ -27,7 +27,6 @@ function UpdateDataForm() {
     const handleChange = (e) => {
         console.log(updatedRaceCarData)
         const { name, value } = e.target;
-        
         setUpdatedRaceCarData(prevData => ({
             ...prevData,
             [name]: value,
@@ -36,25 +35,30 @@ function UpdateDataForm() {
     };
 
     const handleSubmit = async (id) => {
-        console.log({id})
-        console.log(updatedRaceCarData)
         try {
-            console.log('selectedRaceCarId:', id);
-            const returnData = await axios.put(`http://localhost:3000/api/racecars/${id}`);
-            console.log(returnData.data)
-            // setSelectedRaceCarId(null);
-            const updatedData = await axios.get("http://localhost:3000/api/racecars")
-            console.log(updatedData)
+            await axios.put(`http://localhost:3000/api/racecars/${id}`, updatedRaceCarData);
+            const updatedData = await axios.get("http://localhost:3000/api/racecars");
+            setRaceCars(updatedData.data.raceCars);
+            setSelectedRaceCarId(null); // Clear selectedRaceCarId after updating
         } catch (error) {
             console.log('Error updating race car:', error);
         }
     };
 
-    // console.log("Race car IDs:", raceCars.map(raceCar => raceCar.id));
+    const handleDelete = async (id) => {
+        try {
+            await axios.delete(`http://localhost:3000/api/racecars/${id}`);
+            const updatedData = await axios.get("http://localhost:3000/api/racecars");
+            setRaceCars(updatedData.data.raceCars);
+        } catch (error) {
+            console.log('Error deleting race car:', error);
+        }
+    };
+
 
     return (
         <div>
-            {raceCars.map((raceCar,i) => (
+            {raceCars.map((raceCar, i) => (
                 <div key={raceCar.id}>
                     <div className="race-car-info">
                         <h2>{raceCar.name}</h2>
@@ -69,49 +73,52 @@ function UpdateDataForm() {
                                     type="text"
                                     name="name"
                                     placeholder="Enter name"
-                                    value={raceCar.name}
+                                    value={updatedRaceCarData.name || ""}
                                     onChange={handleChange}
                                 />
                                 <input
                                     type="text"
                                     name="team"
                                     placeholder="Enter team"
-                                    value={raceCar.team}
+                                    value={updatedRaceCarData.team || ""}
                                     onChange={handleChange}
                                 />
                                 <input
                                     type="text"
                                     name="carModel"
                                     placeholder="Enter car model"
-                                    value={raceCar.carModel}
+                                    value={updatedRaceCarData.carModel || ""}
                                     onChange={handleChange}
                                 />
                                 <input
                                     type="text"
                                     name="engine"
                                     placeholder="Enter engine"
-                                    value={raceCar.engine}
+                                    value={updatedRaceCarData.engine || ""}
                                     onChange={handleChange}
                                 />
                                 <input
                                     type="number"
                                     name="winsIn2023Season"
                                     placeholder="Enter wins in 2023 season"
-                                    value={raceCar.winsIn2023Season}
+                                    value={updatedRaceCarData.winsIn2023Season || ""}
                                     onChange={handleChange}
                                 />
                                 <input
                                     type="number"
                                     name="polePositionsIn2023Season"
                                     placeholder="Enter pole positions in 2023 season"
-                                    value={raceCar.polePositionsIn2023Season}
+                                    value={updatedRaceCarData.polePositionsIn2023Season || ""}
                                     onChange={handleChange}
                                 />
-                                <button onClick={()=>handleSubmit(raceCar._id)}>Update</button>
+                                <button onClick={() => handleSubmit(raceCar._id)}>Update</button>
                             </div>
                         )}
                         {selectedRaceCarId !== raceCar._id && (
-                            <button onClick={() => handleEdit(raceCar._id)}>Edit</button>
+                            <div>
+                                <button onClick={() => handleEdit(raceCar._id)}>Edit</button>
+                                <button onClick={() => handleDelete(raceCar._id)}>Delete</button>
+                            </div>
                         )}
                     </div>
                 </div>
