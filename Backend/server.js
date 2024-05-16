@@ -18,7 +18,7 @@ App.get("/ping", (req, res) => {
 // Register routes from Routes.js
 App.use("/api", raceRouter);
 
-// MongDB connection
+// MongoDB connection
 mongoose.connect(process.env.DATABASE_URI)
   .then(() => console.log('MongoDB connected'))
   .catch(err => {
