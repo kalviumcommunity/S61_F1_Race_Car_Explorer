@@ -1,7 +1,28 @@
+const express = require('express');
 const { Router } = require('express');
 const { TeamModal } = require("./Schema");
+const Joi = require('joi');
 
-const raceRouter = Router();
+const raceRouter = express.Router();
+
+// Define Joi schema for validation
+const raceCarSchema = Joi.object({
+  name: Joi.string().required(),
+  team: Joi.string().required(),
+  carModel: Joi.string().required(),
+  engine: Joi.string().required(),
+  winsIn2023Season: Joi.number().integer().min(0).required(),
+  polePositionsIn2023Season: Joi.number().integer().min(0).required(),
+}).options({ allowUnknown: true });
+
+// Middleware for validating race car data
+const validateRaceCar = (req, res, next) => {
+  const { error } = raceCarSchema.validate(req.body);
+  if (error) {
+    return res.status(400).json({ message: error.details[0].message });
+  }
+  next();
+};
 
 // Route for creating a new race car
 raceRouter.post('/racecars', async (req, res) => {
@@ -40,9 +61,10 @@ raceRouter.get('/racecars/:id', async (req, res) => {
 });
 
 // Route for updating or patching a race car by ID
-raceRouter.put('/racecars/:id', updateRaceCar);
-raceRouter.patch('/racecars/:id', updateRaceCar);
+raceRouter.put('/racecars/:id', validateRaceCar, updateRaceCar);
+raceRouter.patch('/racecars/:id', validateRaceCar, updateRaceCar);
 
+// Function to handle race car updates
 async function updateRaceCar(req, res) {
   try {
     const { id } = req.params;
