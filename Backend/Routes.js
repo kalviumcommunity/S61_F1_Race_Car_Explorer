@@ -13,7 +13,7 @@ const raceCarSchema = Joi.object({
   engine: Joi.string().required(),
   winsIn2023Season: Joi.number().integer().min(0).required(),
   polePositionsIn2023Season: Joi.number().integer().min(0).required(),
-}).options({ allowUnknown: true });
+});
 
 // Middleware for validating race car data
 const validateRaceCar = (req, res, next) => {
@@ -25,7 +25,7 @@ const validateRaceCar = (req, res, next) => {
 };
 
 // Route for creating a new race car
-raceRouter.post('/racecars', async (req, res) => {
+raceRouter.post('/racecars',validateRaceCar, async (req, res) => {
   try {
     const raceCar = await TeamModal.create(req.body);
     res.status(200).send({ msg: "Race car created successfully", raceCar });
