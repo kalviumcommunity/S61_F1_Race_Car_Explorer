@@ -1,0 +1,85 @@
+import axios from "axios";
+import React, { useState } from "react";
+import Cookies from 'js-cookie'; 
+import { useNavigate } from "react-router-dom";
+
+function Logout() {
+  const [newUser, setNewUser] = useState({
+    fullname: "",
+    username: "",
+    email: "",
+    password: "",
+  });
+
+  const navigate = useNavigate();
+
+  const handleChange = (e, field) => {
+    setNewUser({ ...newUser, [field]: e.target.value });
+  };
+
+  const handleValidation = () => {
+    const errors = {};
+    if (newUser.fullname.length < 5) {
+      errors.fullname = "Full name must be at least 5 characters long.";
+    }
+    if (!/\S+@\S+\.\S+/.test(newUser.email)) {
+      errors.email = "Invalid email address.";
+    }
+    if (newUser.password.length < 8) {
+      errors.password = "Password must be at least 8 characters long.";
+    }
+
+    return Object.keys(errors).length === 0;
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (handleValidation()) {
+      try {
+        const response = await axios.post(
+          "http://localhost:3001/api/logout",
+          {
+            fullname: newUser.fullname,
+            username: newUser.username,
+            email: newUser.email,
+            password: newUser.password,
+          }
+        );
+        console.log("Response:", response.data);
+        Cookies.set("username", newUser.username); // Clear the username cookie
+      } catch (error) {
+        console.error("Error:", error);
+        // Handle errors, such as displaying error messages to the user
+      }
+    } else {
+      console.log("Form validation failed");
+    }
+  };
+
+  return (
+    <div>
+      <h2>Logout</h2>
+      <form onSubmit={handleSubmit}>
+        <div>
+          <label>Full Name: </label>
+          <input type="text" value={newUser.fullname} onChange={(e) => handleChange(e, "fullname")} required />
+        </div>
+        <div>
+          <label>Username: </label>
+          <input type="text" value={newUser.username} onChange={(e) => handleChange(e, "username")} required />
+        </div>
+        <div>
+          <label>Email: </label>
+          <input type="email" value={newUser.email} onChange={(e) => handleChange(e, "email")} required />
+        </div>
+        <div>
+          <label>Password: </label>
+          <input type="password" value={newUser.password} onChange={(e) => handleChange(e, "password")} required />
+        </div>
+        <button type="submit">Logout</button>
+      </form>
+    </div>
+  );
+}
+
+export default Logout;
