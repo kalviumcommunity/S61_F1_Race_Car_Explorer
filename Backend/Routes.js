@@ -1,7 +1,7 @@
 const express = require('express');
-const { Router } = require('express');
 const { TeamModal } = require("./Schema");
 const Joi = require('joi');
+// const { UserModel } = require("./User")
 
 const raceRouter = express.Router();
 
@@ -25,7 +25,7 @@ const validateRaceCar = (req, res, next) => {
 };
 
 // Route for creating a new race car
-raceRouter.post('/racecars',validateRaceCar, async (req, res) => {
+raceRouter.post('/racecars', validateRaceCar, async (req, res) => {
   try {
     const raceCar = await TeamModal.create(req.body);
     res.status(200).send({ msg: "Race car created successfully", raceCar });
@@ -49,11 +49,11 @@ raceRouter.get('/racecars/:id', async (req, res) => {
   try {
     const { id } = req.params;
     const raceCar = await TeamModal.findById(id);
-    
+
     if (!raceCar) {
       return res.status(404).json({ message: "Race car not found" });
     }
-    
+
     res.status(200).json({ message: "Race car found", raceCar });
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -70,7 +70,7 @@ async function updateRaceCar(req, res) {
     const { id } = req.params;
     const options = req.method === 'PUT' ? {} : { new: true }; // Set options based on request method
     const updatedRaceCar = await TeamModal.findByIdAndUpdate(id, req.body, options);
- 
+
     if (!updatedRaceCar) {
       return res.status(404).json({ message: "Race car not found" });
     }
