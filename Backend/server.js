@@ -33,7 +33,7 @@ mongoose.connect(process.env.DATABASE_URI)
 
 App.listen(port, async () => {
 try {
-  await connectDB;
+  await connectDB();
   console.log('connected to DB')
 } catch (error) {
   console.log(error)
