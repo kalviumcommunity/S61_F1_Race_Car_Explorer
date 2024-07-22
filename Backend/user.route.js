@@ -1,6 +1,7 @@
 const { Router } = require("express")
 const { UserModal } = require("./user.model")
 const bcrypt = require("bcrypt")
+const jwt = require("jsonwebtoken");
 
 const userRouter = Router()
 
@@ -67,8 +68,11 @@ userRouter.post("/login", async (req, res) => {
             });
         }
 
+        // Generate JWT token
+        const token = jwt.sign({ id: user._id, email: user.email }, JWT_SECRET, { expiresIn: '1d' });
+
         // Set cookie
-        res.cookie('userEmail', email, { httpOnly: true,  }); 
+        res.cookie('token', token, { httpOnly: true }); 
 
 
         res.status(200).send({
