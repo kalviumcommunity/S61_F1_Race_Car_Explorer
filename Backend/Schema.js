@@ -25,11 +25,15 @@ const f1TeamSchema = mongoose.Schema({
     polePositionsIn2023Season: {
         type: Number,
         required: true
+    },
+    userId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+        required: true
     }
 });
 
 const TeamModal = mongoose.model('team', f1TeamSchema)
 
-// Export the schemas
 
-module.exports = {TeamModal}
+module.exports = { TeamModal }
